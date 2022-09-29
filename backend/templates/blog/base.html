@@ -1,6 +1,6 @@
 {% load static %}
 
-<!DOCTYPE html>
+<!--<!DOCTYPE html>-->
 <html lang="en">
 <head>
     <!-- add bootstrap from https://getbootstrap.com/docs/4.0/getting-started/introduction/-->
@@ -36,8 +36,14 @@
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-              <a class="nav-item nav-link" href="#">Login</a>
-              <a class="nav-item nav-link" href="#">Register</a>
+                {% if user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{% url 'post-create' %}">NEW POST</a>
+                    <a class="nav-item nav-link" href="{% url 'profile' %}">{{ user }} Profile</a>
+                    <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                  <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                  <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                {% endif %}
             </div>
           </div>
         </div>
@@ -47,6 +53,12 @@
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}"> {{ message }} </div>
+                {% endfor %}
+            {% endif %}
+
           {% block content %}{% endblock %}
         </div>
         <div class="col-md-4">
